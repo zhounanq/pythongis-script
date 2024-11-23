@@ -30,7 +30,7 @@ def raster_to_polygon_rasterio(input_raster, output_shp):
         mask = band != src.nodata
         results = ({'properties': {'raster_val': v}, 'geometry': s} for i, (s, v) in enumerate(rasterio.features.shapes(band, mask=mask, transform=src.transform)))
 
-        # GeoDataFrame and save as Shapefile
+        # Convert results to GeoDataFrame and save as Shapefile
         gdf = gpd.GeoDataFrame.from_features(list(results))
         gdf.to_file(output_shp)
 
@@ -72,7 +72,8 @@ def raster_to_polygon_gdal(input_raster, output_shp, shp_format='ESRI Shapefile'
     dst_layer.CreateField(ogr.FieldDefn("raster_val", ogr.OFTInteger))
 
     # Polygonize the raster
-    mask = band != nodata
+    band_data = band.ReadAsArray()
+    mask = band_data != nodata
     gdal.Polygonize(band, mask, dst_layer, dst_field_name, [], callback=None)
 
     # Close the output shapefile

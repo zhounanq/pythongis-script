@@ -30,7 +30,7 @@ def zonal_statistics_rasterstats(input_shp, input_raster, output_shp, stats=["me
     stats (list): A list of statistics to calculate. Optional values include 'mean', 'min', 'max', 'median', 'sum', 'std', etc.
 
     Returns:
-    result (GeoDataFrame): The GeoDataFrame containing the calculated statistics.
+    result (str): The path to the output shapefile containing the calculated statistics.
     """
 
     # Read the shapefile
@@ -46,7 +46,7 @@ def zonal_statistics_rasterstats(input_shp, input_raster, output_shp, stats=["me
     # Save the result to a new shapefile
     shapes.to_file(output_shp)
 
-    return shapes
+    return output_shp
 
 
 # TODO: 如果有时间，还是自己实现zonal statistics, 参考QGIS的实现方式提高精度，是否可以调用gdal库提升计算效率？

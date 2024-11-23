@@ -5,11 +5,13 @@
 Author: Zhou Ya'nan
 Date: 2021-09-16
 """
+import os
+from typing import List, Optional
 import geopandas as gpd
 import rasterio
 
 
-def extract_raster_values_to_points(input_raster, input_shp, output_shp, bands=None):
+def extract_raster_values_to_points(input_raster: str, input_shp: str, output_shp: str, bands: Optional[List[int]] = None) -> str:
     """
     Extract values from multiple bands of a raster to points.
     The raster values will be stored in new fields named 'band_1', 'band_2', etc., in the output shapefile.
@@ -19,13 +21,23 @@ def extract_raster_values_to_points(input_raster, input_shp, output_shp, bands=N
     input_raster: str
         The input raster file.
     input_shp: str
-        The input points shapefile.
+        The input shapefile containing points.
     output_shp: str
-        The output shapefile.
-    bands: list
-        A list of band indices to extract values from.
-        If empty, values from all bands will be extracted.
+        The output shapefile where the extracted values will be stored.
+    bands: list of int, optional
+        A list of integers representing band indices to extract values from.
+        If None, values from all bands will be extracted.
+
+    Returns
+    -------
+    str
+        The file path of the output shapefile.
     """
+    if not os.path.exists(input_raster):
+        raise FileNotFoundError(f"The input raster file '{input_raster}' does not exist.")
+    if not os.path.exists(input_shp):
+        raise FileNotFoundError(f"The input shapefile '{input_shp}' does not exist.")
+
     # Load the points shapefile
     if bands is None:
         bands = []
