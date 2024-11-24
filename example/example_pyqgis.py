@@ -5,16 +5,20 @@ pyqgis
 Author: Zhou Ya'nan
 Date: 2021-09-16
 """
-import pyqgis_lib
-from pyqgis_lib import qgis_manager
+import os
+import sys
+
+# 添加 pyqgis_lib 目录到 sys.path
+pyqgis_lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../pyqgis_lib"))
+sys.path.append(pyqgis_lib_path)
 
 
 def main_example():
 
     try:
         # 使用缓冲区算法
-        buffer_algo = qgis_manager.get_algorithm('buffer')
-        buffer_output = buffer_algo.run("../data/line.shp", 500, "../data/line_output.shp")
+        from pyqgis_lib import buffer
+        buffer_output = buffer("./data/line.shp", "./data/line_output.shp", 500)
         print(f"Buffer output: {buffer_output}")
     finally:
         # QGIS 资源会在程序退出时自动释放

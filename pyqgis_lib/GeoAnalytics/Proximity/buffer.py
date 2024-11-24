@@ -50,9 +50,6 @@ def run(input_file, output_file, distance):
         return result['OUTPUT']
         # result = QgsApplication.processingRegistry().algorithmById(algo).run(parameters, context, feedback)
         # return result[0]['OUTPUT']
-    except QgsProcessingException as e:
-        print(f"Qgs Processing Exception: {e}")
-        return None
-    except Exception as e:
-        print(f"Other Exception: {e}")
+    except (QgsProcessingException, Exception) as e:
+        print(f"Exception: {e}")
         return None

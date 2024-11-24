@@ -49,9 +49,6 @@ def add_autoincrement_field(input_file, output_file, field_name='id'):
     try:
         result = processing.run(algo, parameters, context=context, feedback=feedback)
         return result['OUTPUT']
-    except QgsProcessingException as e:
-        print(f"Qgs Processing Exception: {e}")
-        return None
-    except Exception as e:
-        print(f"Other Exception: {e}")
+    except (QgsProcessingException, Exception) as e:
+        print(f"Exception: {e}")
         return None
