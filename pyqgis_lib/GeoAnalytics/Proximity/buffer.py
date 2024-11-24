@@ -10,13 +10,16 @@ from qgis.core import (QgsApplication, QgsProcessingContext, QgsProcessingFeedba
 import processing
 
 
-# NOTE: QGIS本身就有自增ID的功能，可以直接调用
-def add_autoincrement_field(input_file, output_file, field_name='id'):
+# To see the help, just run the following code by providing the algorithm id
+# processing.algorithmHelp("native:buffer")
+
+
+def run(input_file, output_file, distance):
     """
-    添加自增字段
+    缓冲区算法
     :param input_file: 输入矢量文件路径
     :param output_file: 输出路径
-    :param field_name: 字段名称
+    :param distance: 缓冲距离
     :return: 输出文件路径
     """
     # Initialize the feedback
@@ -35,20 +38,18 @@ def add_autoincrement_field(input_file, output_file, field_name='id'):
     #     raise ValueError(f"Can't load: {input_path}")
 
     # Run the algorithm
-    algo = "native:addautoincrementalfield"
+    algo = "native:buffer"
     parameters = {
         'INPUT': input_file,
-        'FIELD_NAME': field_name,
-        'START': 1,
-        'GROUP_FIELDS': [],
-        'SORT_EXPRESSION': '',
-        'SORT_ASCENDING': True,
+        'DISTANCE': distance,
         'OUTPUT': output_file
     }
 
     try:
         result = processing.run(algo, parameters, context=context, feedback=feedback)
         return result['OUTPUT']
+        # result = QgsApplication.processingRegistry().algorithmById(algo).run(parameters, context, feedback)
+        # return result[0]['OUTPUT']
     except QgsProcessingException as e:
         print(f"Qgs Processing Exception: {e}")
         return None
